@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Interactive N-Queens Problem Solver with visual backtracking animation. Place N queens on an NxN chessboard so no two queens threaten each other.">
+    <title>N-Queens Solver | Interactive Backtracking Visualizer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Animated Background -->
+        <div class="bg-grid"></div>
+        <div class="bg-glow bg-glow-1"></div>
+        <div class="bg-glow bg-glow-2"></div>
+        <div class="bg-glow bg-glow-3"></div>
+
+        <!-- Header -->
+        <header class="header" id="app-header">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">♛</span>
+                    <div class="logo-text">
+                        <h1>N-Queens Solver</h1>
+                        <p class="tagline">Backtracking Visualizer</p>
+                    </div>
+                </div>
+                <div class="header-badge">
+                    <span class="badge-dot"></span>
+                    <span class="badge-text">Interactive</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Controls Panel -->
+            <section class="controls-panel glass-card" id="controls-panel">
+                <h2 class="section-title">
+                    <span class="title-icon">⚙</span>
+                    Configuration
+                </h2>
+
+                <div class="control-group">
+                    <label for="board-size" class="control-label">Board Size (N)</label>
+                    <div class="slider-container">
+                        <input type="range" id="board-size" min="4" max="12" value="8" class="slider">
+                        <span class="slider-value" id="size-display">8</span>
+                    </div>
+                    <p class="control-hint">N × N chessboard with N queens</p>
+                </div>
+
+                <div class="control-group">
+                    <label for="speed-control" class="control-label">Animation Speed</label>
+                    <div class="slider-container">
+                        <input type="range" id="speed-control" min="1" max="5" value="3" class="slider">
+                        <span class="slider-value" id="speed-display">3×</span>
+                    </div>
+                    <p class="control-hint">Backtracking visualization speed</p>
+                </div>
+
+                <div class="button-group">
+                    <button id="btn-solve" class="btn btn-primary">
+                        <span class="btn-icon">▶</span>
+                        Solve
+                    </button>
+                    <button id="btn-step" class="btn btn-secondary">
+                        <span class="btn-icon">⏭</span>
+                        Step
+                    </button>
+                    <button id="btn-all" class="btn btn-accent">
+                        <span class="btn-icon">⚡</span>
+                        All Solutions
+                    </button>
+                    <button id="btn-reset" class="btn btn-outline">
+                        <span class="btn-icon">↺</span>
+                        Reset
+                    </button>
+                </div>
+            </section>
+
+            <!-- Chessboard Area -->
+            <section class="board-area" id="board-area">
+                <div class="board-wrapper">
+                    <div class="board-labels board-labels-top" id="col-labels-top"></div>
+                    <div class="board-main-row">
+                        <div class="board-labels board-labels-left" id="row-labels"></div>
+                        <div class="chessboard" id="chessboard"></div>
+                    </div>
+                </div>
+
+                <!-- Threat Lines Overlay -->
+                <svg class="threat-overlay" id="threat-overlay"></svg>
+            </section>
+
+            <!-- Stats & Info Panel -->
+            <section class="info-panel glass-card" id="info-panel">
+                <h2 class="section-title">
+                    <span class="title-icon">📊</span>
+                    Statistics
+                </h2>
+
+                <div class="stats-grid">
+                    <div class="stat-card" id="stat-steps">
+                        <span class="stat-value" id="steps-count">0</span>
+                        <span class="stat-label">Steps Taken</span>
+                    </div>
+                    <div class="stat-card" id="stat-backtracks">
+                        <span class="stat-value" id="backtracks-count">0</span>
+                        <span class="stat-label">Backtracks</span>
+                    </div>
+                    <div class="stat-card" id="stat-solutions">
+                        <span class="stat-value" id="solutions-count">0</span>
+                        <span class="stat-label">Solutions Found</span>
+                    </div>
+                    <div class="stat-card" id="stat-queens">
+                        <span class="stat-value" id="queens-count">0</span>
+                        <span class="stat-label">Queens Placed</span>
+                    </div>
+                </div>
+
+                <!-- Status Message -->
+                <div class="status-bar" id="status-bar">
+                    <div class="status-indicator" id="status-indicator"></div>
+                    <span class="status-text" id="status-text">Ready to solve</span>
+                </div>
+
+                <!-- Algorithm Info -->
+                <div class="algorithm-info">
+                    <h3 class="info-subtitle">How It Works</h3>
+                    <div class="info-steps">
+                        <div class="info-step">
+                            <span class="step-num">1</span>
+                            <span class="step-text">Place queen in current row</span>
+                        </div>
+                        <div class="info-step">
+                            <span class="step-num">2</span>
+                            <span class="step-text">Check column &amp; diagonals</span>
+                        </div>
+                        <div class="info-step">
+                            <span class="step-num">3</span>
+                            <span class="step-text">If safe, move to next row</span>
+                        </div>
+                        <div class="info-step">
+                            <span class="step-num">4</span>
+                            <span class="step-text">If stuck, backtrack &amp; retry</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Solutions Gallery -->
+                <div class="solutions-gallery" id="solutions-gallery" style="display: none;">
+                    <h3 class="info-subtitle">Solutions Gallery</h3>
+                    <div class="gallery-nav">
+                        <button class="gallery-btn" id="btn-prev-sol">◀</button>
+                        <span class="gallery-counter" id="gallery-counter">1 / 1</span>
+                        <button class="gallery-btn" id="btn-next-sol">▶</button>
+                    </div>
+                    <div class="mini-boards" id="mini-boards"></div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Legend -->
+        <footer class="legend-bar" id="legend-bar">
+            <div class="legend-items">
+                <div class="legend-item">
+                    <span class="legend-swatch legend-queen"></span>
+                    <span>Queen Placed</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-swatch legend-safe"></span>
+                    <span>Safe Position</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-swatch legend-conflict"></span>
+                    <span>Conflict / Attacked</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-swatch legend-trying"></span>
+                    <span>Currently Trying</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-swatch legend-backtrack"></span>
+                    <span>Backtracking</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="solver.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
